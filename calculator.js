@@ -5,8 +5,8 @@
   //  CONFIGURATION
   //  Fill these in before deploying. Commit the file after saving.
   // ─────────────────────────────────────────────────────────────────────────────
-  var HUBSPOT_PORTAL_ID = 'YOUR_PORTAL_ID';
-  var HUBSPOT_FORM_GUID = 'YOUR_FORM_GUID';
+  var HUBSPOT_PORTAL_ID = '7185788';
+  var HUBSPOT_FORM_GUID = 'c977726c-77dc-4170-9f8f-6fe034dd9167';
   var CTA_URL           = 'https://parkingguidancesystems.com/contact-pgs-sales/';
   var SOLUTIONS_URL     = 'https://parkingguidancesystems.com/parking-solutions/';
 
@@ -320,11 +320,6 @@
     var fields = [
       { name: 'email',                                 value: email },
       { name: 'parking_asset_value_score',             value: String(finalScore) },
-      { name: 'pav_utilization_access_score',          value: String(sectionScores[0]) },
-      { name: 'pav_adaptability_experience_score',     value: String(sectionScores[1]) },
-      { name: 'pav_visibility_performance_score',      value: String(sectionScores[2]) },
-      { name: 'pav_score_tier',                        value: tier.label },
-      { name: 'pav_focus_area',                        value: focusArea },
     ].filter(function(f) { return f.value !== ''; });
 
     var payload = {
