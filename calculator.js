@@ -8,7 +8,11 @@
   var HUBSPOT_PORTAL_ID = '7185788';
   var HUBSPOT_FORM_GUID = 'c977726c-77dc-4170-9f8f-6fe034dd9167';
   var CTA_URL           = 'https://parkingguidancesystems.com/contact-pgs-sales/';
-  var SOLUTIONS_URL     = 'https://parkingguidancesystems.com/parking-solutions/';
+  var SOLUTIONS_URL     = 'https://parkingguidancesystems.com/parking-solutions/?utm_campaign=53054898-2026%20-%20Cold%20Outbound%20-%20Q3&utm_source=Parking%20Asset%20Value%20Calculator';
+  var MAIN_WEBSITE_URL  = 'https://parkingguidancesystems.com/';
+  var CALCULATOR_URL    = 'https://parkingguidancesystems.com/pgs-calculator/';
+  var THANKYOU_PARAM    = 'screen';
+  var THANKYOU_VALUE    = 'thankyou';
 
   // HubSpot Custom Behavioral Events
   // Create each event in HubSpot → Reports → Analytics Tools → Custom Behavioral Events,
@@ -418,7 +422,8 @@
 
   function ctaClick() {
     hsTrack(HS_EVENT_CTA, { final_score: $id('result-score-num').textContent, cta: 'primary' });
-    window.open(CTA_URL, '_blank', 'noopener');
+    // Navigation is handled by the HubSpot CTA anchor's own href (opens in a new tab,
+    // then HubSpot redirects to the thank-you URL configured in the CTA's settings).
   }
 
   function secondaryCtaClick() {
@@ -549,6 +554,11 @@
     '#pgs-calculator .pgsc-btn-cta:hover{background:#028a86;}',
     '#pgs-calculator .pgsc-cta-secondary{display:block;font-size:13px;color:rgba(255,255,255,0.75);text-decoration:underline;cursor:pointer;background:none;border:none;font-family:"Raleway",sans-serif;margin:0 auto;}',
     '#pgs-calculator .pgsc-cta-secondary:hover{color:#fff;}',
+
+    /* thank you */
+    '#pgs-calculator .pgsc-thankyou-copy{font-size:16px;color:#1f1f1f;line-height:1.7;margin-bottom:24px;}',
+    '#pgs-calculator .pgsc-thankyou-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#005c8e;text-decoration:none;}',
+    '#pgs-calculator .pgsc-thankyou-link:hover{text-decoration:underline;}',
     '#pgs-calculator .pgsc-gate-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;}',
     '#pgs-calculator .pgsc-btn-inline{width:auto;padding:13px 28px;}',
     '#pgs-calculator .pgsc-results-footer{margin-top:16px;}',
@@ -643,10 +653,26 @@
         '<div class="pgsc-cta-box">' +
           '<h3>Ready to get more value from your parking assets?</h3>' +
           '<p id="pgsc-bottom-cta-copy"></p>' +
-          '<button id="pgsc-btn-cta-primary" class="pgsc-btn-cta" onclick="_pgsc.ctaClick()">Review My Results With a PGS Expert &#8594;</button>' +
+          '<div class="hs-cta-embed hs-cta-simple-placeholder hs-cta-embed-221393987944" style="max-width:100%;max-height:100%;width:382px;height:50.377601623535156px;margin:0 auto 12px;" data-hubspot-wrapper-cta-id="221393987944">' +
+            '<a href="https://cta-service-cms2.hubspot.com/web-interactives/public/v1/track/redirect?encryptedPayload=AVxigLLqavPERHZqsPepD35jHKo0FvVvvHI2N7FHjbQnFreS3fcfM7WECyo8aNV1MFzq0fBonXvrVgasMkL%2FeHHYTsc7C54pCcla%2BY4md6252QeHMURpIQ6B2w598GWV%2B6pCKKnysZR6ukuvN7AY15%2BcLV%2FkA2K6HURyxGMcsxH4QmdguiRyiDnGluiMb5R5k2X3YRAa14v3OUJE&webInteractiveContentId=221393987944&portalId=7185788" target="_blank" rel="noopener" crossorigin="anonymous" onclick="_pgsc.ctaClick()">' +
+              '<img alt="Review My Results With a PGS Expert" loading="lazy" src="https://no-cache.hubspot.com/cta/default/7185788/interactive-221393987944.png" style="height:100%;width:100%;object-fit:fill" onerror="this.style.display=\'none\'">' +
+            '</a>' +
+          '</div>' +
           '<button class="pgsc-cta-secondary" onclick="_pgsc.secondaryCtaClick()">Explore PGS solutions</button>' +
         '</div>' +
         '<div class="pgsc-results-footer"><button class="pgsc-btn-back" onclick="_pgsc.goBackFromResults()">&#8592; Back</button></div>' +
+      '</div>' +
+    '</div>' +
+
+    /* ── thank you ── */
+    '<div id="pgsc-screen-thankyou" class="pgsc-screen">' +
+      '<div class="pgsc-card-header">' +
+        '<div class="pgsc-eyebrow">Thank You</div>' +
+        '<h2>You&#8217;re all set.</h2>' +
+      '</div>' +
+      '<div class="pgsc-card-body">' +
+        '<p class="pgsc-thankyou-copy">We will be reaching out shortly to coordinate a follow-up!</p>' +
+        '<a class="pgsc-thankyou-link" href="' + MAIN_WEBSITE_URL + '">&#8592; Return to our website</a>' +
       '</div>' +
     '</div>' +
 
@@ -663,6 +689,13 @@
     document.head.appendChild(styleEl);
 
     root.innerHTML = HTML;
+
+    try {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get(THANKYOU_PARAM) === THANKYOU_VALUE) {
+        showScreen('thankyou');
+      }
+    } catch (e) { /* URLSearchParams unsupported; ignore, default screen shows */ }
 
     window._pgsc = {
       startAssessment:    startAssessment,
