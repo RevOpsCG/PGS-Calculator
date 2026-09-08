@@ -146,6 +146,14 @@
     _hsq.push(['trackPageView']);
   }
 
+  // Reads the HubSpot tracking cookie set by the site's HubSpot tracking script.
+  // Required by the Forms API so submissions from this custom form link to the
+  // visitor's existing browser session (page views, CTA clicks, etc).
+  function getCookie(name) {
+    var match = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+    return match ? decodeURIComponent(match[1]) : undefined;
+  }
+
   // ── DOM helpers ──────────────────────────────────────────────────────────────
   var root;
   function $id(id) { return root.querySelector('#pgsc-' + id); }
@@ -328,7 +336,11 @@
 
     var payload = {
       fields: fields,
-      context: { pageUri: window.location.href, pageName: document.title },
+      context: {
+        pageUri:  window.location.href,
+        pageName: document.title,
+        hutk:     getCookie('hubspotutk'),
+      },
     };
 
     var doShow = function() {
