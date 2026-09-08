@@ -401,10 +401,8 @@
     // Bottom CTA
     if (allStrong) {
       $id('bottom-cta-copy').textContent = ADVANCED_OPTIMIZATION.ctaCopy;
-      $id('btn-cta-primary').textContent = ADVANCED_OPTIMIZATION.ctaLabel + ' →';
     } else {
       $id('bottom-cta-copy').textContent = 'Use your results to identify where modernization could create the greatest impact. PGS can help you develop a roadmap tailored to your facility, users, and operational goals.';
-      $id('btn-cta-primary').textContent = 'Review My Results With a PGS Expert →';
     }
 
     showScreen('results');
